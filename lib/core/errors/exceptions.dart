@@ -45,3 +45,9 @@ class AuthenticationException extends AppException {
     super.statusCode,
   });
 }
+
+class SecureStorageException extends AppException {
+  const SecureStorageException({
+    required super.message
+  });
+}

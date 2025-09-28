@@ -61,3 +61,12 @@ class AuthenticationFailure extends Failure {
   @override
   List<Object> get props => [message];
 }
+
+class SecureStorageFailure extends Failure {
+  final String message;
+
+  const SecureStorageFailure(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
