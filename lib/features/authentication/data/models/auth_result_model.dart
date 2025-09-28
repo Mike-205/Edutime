@@ -6,7 +6,8 @@ class AuthResultModel extends AuthResultEntity {
     required super.user,
     required super.accessToken,
     required super.refreshToken,
-    required super.expiresAt,
+    required super.accessTokenExpiry,
+    required super.refreshTokenExpiry
   });
 
   factory AuthResultModel.fromJson(Map<String, dynamic> json) {
@@ -14,7 +15,8 @@ class AuthResultModel extends AuthResultEntity {
       user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
       accessToken: json['access_token'],
       refreshToken: json['refresh_token'],
-      expiresAt: DateTime.parse(json['expires_at']),
+      accessTokenExpiry: DateTime.parse(json['access_token_expiry']),
+      refreshTokenExpiry: DateTime.parse(json['refresh_token_expiry']),
     );
   }
 
@@ -23,7 +25,8 @@ class AuthResultModel extends AuthResultEntity {
       'user': (user as UserModel).toJson(),
       'accessToken': accessToken,
       'refreshToken': refreshToken,
-      'expiresAt': expiresAt.toIso8601String(),
+      'accessTokenExpiry': accessTokenExpiry.toIso8601String(),
+      'refreshTokenExpiry': refreshTokenExpiry.toIso8601String(),
     };
   }
 }

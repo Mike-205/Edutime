@@ -11,7 +11,7 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    final accessToken = await secureStorage.getAccessTokens();
+    final accessToken = await secureStorage.getAccessToken();
     if (accessToken != null) {
       options.headers['Authorization'] = 'Bearer $accessToken';
     }
@@ -22,16 +22,18 @@ class AuthInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401 && authRepository != null) {
       try {
-        final refreshToken = await secureStorage.getRefreshTokens();
+        final refreshToken = await secureStorage.getRefreshToken();
         if (refreshToken != null && refreshToken.isNotEmpty) {
           final refreshResult = await authRepository!.refreshToken(refreshToken);
 
           await refreshResult.fold(
             (failure) async => handler.next(err),
             (authResult) async {
-              await secureStorage.storeTokens(
+              await secureStorage.storeTokenData(
                 accessToken: authResult.accessToken,
                 refreshToken: authResult.refreshToken,
+                accessTokenExpiry: authResult.accessTokenExpiry,
+                refreshTokenExpiry: authResult.refreshTokenExpiry
               );
 
               // Retry the original request
@@ -43,11 +45,11 @@ class AuthInterceptor extends Interceptor {
             }
           );
         } else {
-          await secureStorage.clearAll();
+          await secureStorage.clearAuthData();
           handler.next(err);
         }
       } catch (e) {
-        await secureStorage.clearAll();
+        await secureStorage.clearAuthData();
         handler.next(err);
       }
     } else {
