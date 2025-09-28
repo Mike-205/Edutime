@@ -42,6 +42,8 @@ dependencies:
   dio_smart_retry:
   internet_connection_checker:
   flutter_secure_storage:
+  shared_preferences:
+  hive:
   google_sign_in:
   flutter_svg:
   date_picker_timeline:
@@ -50,7 +52,6 @@ dependencies:
   flutter_screenutil:
   google_fonts:
   timelines_plus:
-  shared_preferences:
 
 dev_dependencies:
   flutter_test:
